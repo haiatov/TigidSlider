@@ -1,0 +1,22 @@
+*{
+    margin:0px;
+    padding:0px;
+}
+
+img{
+    width:100%;
+    display: block;
+}
+
+.img3{
+    width:100%;
+    height: 100vh;
+    background-size:cover;
+}
+
+.img4{
+    width:100%;
+    height: 100vh;
+    background-size:cover;
+    background: url('../img/img4.jpg?1');
+}
