@@ -5,23 +5,40 @@
 
         <link rel="stylesheet" type="text/css" href="css/main.css" />
 
-        <script src="js/TigidPreloader/TigidPreloader.js"></script>
-        <link rel="stylesheet" type="text/css" href="js/TigidPreloader/TigidPreloader.css" />
+        <script src="js/TigidSlider/TigidSlider.js"></script>
     </head>
 
     <body>
         <script>
+            let tigidSlider = null;
             document.addEventListener('DOMContentLoaded', function(){
-                var tigidPreloader = new TigidPreloader({barType: 'vertical', xPosition: 'right', yPosition: 'bottom'});
+                tigidSlider = new TigidSlider(document.getElementById('slider'));
+
             });
 
-        </script>
+            document.addEventListener('keydown', function(event){
+                if(event.key === 'ArrowRight'){
+                    tigidSlider.nextItem();
+                }else if(event.key === 'ArrowLeft'){
+                    tigidSlider.previousItem();
+                }
 
-        <img src="img/img1.jpg" />
-        <img src="img/img2.jpg" />
-        <div class="img3" style="background-image:url('img/img3.jpg')"></div>
-        <div class="img4"></div>
-        <img src="img/no-image.jpg?" />
+            })
+
+        </script>
+        <div class="slider" id="slider">
+            <div><img src="img/img1.jpg" /></div>
+            <div><img src="img/img2.jpg" /></div>
+            <div><img src="img/img3.jpg" /></div>
+            <div><img src="img/img4.jpg" /></div>
+            <div><img src="img/img1.jpg" /></div>
+            <div><img src="img/img2.jpg" /></div>
+            <div><img src="img/img3.jpg" /></div>
+            <div><img src="img/img4.jpg" /></div>
+        </div>
+
+
+
     </body>
 
 </html>

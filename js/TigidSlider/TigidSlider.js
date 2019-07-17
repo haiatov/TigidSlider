@@ -1,101 +1,58 @@
-class TigidPreloader{
-    constructor(config){
-        this.preloader = document.createElement('div');
-        this.preloader.bar = document.createElement('div');
+class TigidSlider{
+    constructor(container, config = {}){
+        this.slider = container;
+        this.items = [].slice.call(this.slider.children);
 
-        this.container = config.container || document.body;
-        this.isScrollBlock = config.isScrollBlock || true;
-        this.preloaderClassName = config.preloaderClassName || 'tigid-preloader';
-
-        this.preloader.bar.barType = config.barType || 'horizontal';
-        this.preloader.bar.xPosition = config.xPosition || 'left';
-        this.preloader.bar.yPosition = config.yPosition || 'top';
-
-        this.images = [].slice.call(this.container.getElementsByTagName('img'));
-        this.images.forEach(item => {
-            item.src = item.src;
-        })
-
-        let allElements = [].slice.call(this.container.querySelectorAll('*'));
-        allElements.push(this.container);
-        allElements.forEach(item => {
-            let imgUrl = getComputedStyle(item).backgroundImage;
-            if(imgUrl && imgUrl !== 'none'){
-                imgUrl = imgUrl.replace('url(','').replace(')','').replace(/\"/gi, '');
-                let imgFromElement = document.createElement('img');
-                imgFromElement.src = imgUrl;
-                this.images.push(imgFromElement);
-            }
-        })
-
-        this.imagesLoaded = 0;
-
-        if(this.isScrollBlock){
-            this.container.style.overflow = 'hidden';
-        }
-
+        this.sliderClassName = config.sliderClassName || 'tigid-slider';
         this.initInterface();
-        this.initEvents();
+
+        this.currentIndex = 0;
     }
 
     initInterface(){
+        this.slider.style.whiteSpace = 'nowrap';
+        this.slider.style.overflow = 'hidden';
+        this.slider.style.position = 'relative';
+        this.slider.classList.add(this.sliderClassName);
 
-        this.preloader.classList.add(this.preloaderClassName);
-
-        this.preloader.logo = document.createElement('div');
-        this.preloader.logo.classList.add(this.preloaderClassName + '__logo');
-        this.preloader.appendChild(this.preloader.logo);
-
-        this.preloader.bar.classList.add(this.preloaderClassName + '__bar', this.preloader.bar.barType, this.preloader.bar.xPosition, this.preloader.bar.yPosition);
-        this.preloader.appendChild(this.preloader.bar);
-
-
-        this.container.appendChild(this.preloader);
-    }
-
-    initEvents(){
-        this.images.forEach(item => {
-            item.addEventListener('load', (event) => {
-                this.increaseLoadedImages();
-            })
-            item.addEventListener('error', (event) => {
-                this.logString(`Image wasn't uploaded: ${event.target.src}`);
-                this.increaseLoadedImages();
-            })
-        });
-
-        this.preloader.addEventListener('transitionend', (event) => {
-            if(this.target != this.preloader) return;
-            this.removePreloader();
+        this.innerContainer = document.createElement('div');
+        this.innerContainer.style.cssText = "height: 100%; position: absolute; transition: all .5s; left: 0px;";
+        this.items.forEach(item => {
+            item.classList.add(`${this.sliderClassName}__item`);
+            this.innerContainer.appendChild(item);
         })
+        this.slider.appendChild(this.innerContainer);
+
     }
 
-    increaseLoadedImages(){
-        this.imagesLoaded++;
+    nextItem(){
+        if(this.currentIndex === this.items.length - 1) return;
+        let currentItem = this.items[this.currentIndex];
+        this.currentIndex++;
+        let nextItem = this.items[this.currentIndex];
+        this.moveSlider(-1 * nextItem.offsetLeft);
+    }
 
-        if(this.preloader.bar.barType == 'horizontal'){
-            this.preloader.bar.style.width = Math.ceil((this.imagesLoaded / this.images.length) * 100) + '%';
-        }else if(this.preloader.bar.barType == 'vertical'){
-            this.preloader.bar.style.height = Math.ceil((this.imagesLoaded / this.images.length) * 100) + '%';
+    previousItem(){
+        if(this.currentIndex === 0) return;
+        let currentItem = this.items[this.currentIndex];
+        this.currentIndex--;
+        let nextItem = this.items[this.currentIndex];
+        this.moveSlider(-1 * nextItem.offsetLeft);
+    }
+
+    moveSlider(newPosition){
+        let _newPosition = newPosition;
+        if(Math.abs(newPosition) + this.slider.clientWidth > this.innerContainer.clientWidth) {
+            _newPosition = -1 * (this.innerContainer.clientWidth - this.slider.clientWidth);
         }
-
-        if(this.imagesLoaded == this.images.length){
-            this.hidePreloader();
-        }
+        console.log(_newPosition);
+        this.innerContainer.style.left = _newPosition + 'px';
     }
 
-    hidePreloader(){
-        if(this.isScrollBlock){
-            this.container.style.overflow = '';
-        }
-        this.preloader.classList.add('hidden');
-    }
 
-    removePreloader(){
-        this.preloader.remove();
-    }
 
     logString(string){
-        console.log(`Tigid Preloader: ${string}`);
+        console.log(`Tigid Slider: ${string}`);
     }
 }
