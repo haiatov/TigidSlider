@@ -12,9 +12,20 @@
         <script>
             let tigidSlider = null;
             document.addEventListener('DOMContentLoaded', function(){
-                tigidSlider = new TigidSlider(document.getElementById('slider'));
+				let galleryElement = document.getElementById('slider');
+                tigidSlider = new TigidSlider(galleryElement, {
+					prevButton: document.querySelector('.arrows .arrow.left'),
+					nextButton: document.querySelector('.arrows .arrow.right'),
+					countTitle: document.querySelector('.horizontalGallery__count'),
+					currentIndexTitle: document.querySelector('.horizontalGallery__current'),
+					beforeChangeItemCallback: beforeChangeItemCallback
+				});
 
             });
+			
+			function beforeChangeItemCallback(){
+				console.log('callback!');
+			}
 
             document.addEventListener('keydown', function(event){
                 if(event.key === 'ArrowRight'){
@@ -36,6 +47,12 @@
             <div><img src="img/img3.jpg" /></div>
             <div><img src="img/img4.jpg" /></div>
         </div>
+		
+		<div class="arrows">
+			<a class="arrow left">< LEFT</a>
+			<span><span class="horizontalGallery__current"></span> / <span class="horizontalGallery__count"></span></span>
+			<a class="arrow right">RIGHT ></a>
+		</div>
 
 
 

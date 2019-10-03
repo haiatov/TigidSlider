@@ -19,3 +19,15 @@
 .slider .tigid-slider__item img{
     height: 100%;
 }
+
+.arrows{
+    margin-left: 200px;
+	font-family: Arial;
+	font-size: 12px;
+	margin-top: 50px;
+
+}
+
+.arrow{
+	text-decoration: underline;
+}
